@@ -1,4 +1,6 @@
 const Listing = require("../models/listing.js");
+const { listingSchema } = require("../schema.js");
+const ExpressError = require("../utils/ExpressError.js");
 
 module.exports.index = async (req, res) => {
     const allListings = await Listing.find({});
@@ -13,8 +15,8 @@ module.exports.renderNewForm = (req, res) => {
 }
 
 module.exports.showListing = async(req, res) => {
-    let { id } = req.params;
-    const listing = await Listing.findById(id).populate({ path: "reviews", populate: { path: "author" } }).populate("owner");
+    let { listingId } = req.params;
+    const listing = await Listing.findById(listingId).populate({ path: "reviews", populate: { path: "author" } }).populate("owner");
 
     res.render("listings/show", { listing })
     return;
@@ -53,13 +55,13 @@ module.exports.createListing = async (req, res) => {
 }
 
 module.exports.renderEditForm = async (req, res) => {
-    let { id } = req.params;
-    const listing = await Listing.findById(id);
+    let { listingId } = req.params;
+    const listing = await Listing.findById(listingId);
 
     if (!listing) throw new ExpressError(404, "Listing not found");
 
     let originalImageUrl = listing.image.url;
-    originalImageUrl = originalImgaeUrl.replace("/upload", "/upload/w_250");
+    originalImageUrl = originalImageUrl.replace("/upload", "/upload/w_250");
 
     res.render("listings/edit", { listing });
     return;
@@ -70,10 +72,10 @@ module.exports.updateListing = async (req, res) => {
     let url = req.file.path;
     let filename = req.file.filename;
 
-    let{ id } = req.params;
+    let{ listingId } = req.params;
     let { title, description, image, price, country, location } = req.body;
 
-    listing = await Listing.findByIdAndUpdate(id, {
+    let listing = await Listing.findByIdAndUpdate(listingId, {
         title: title,
         description: description,
         image: image,
@@ -89,13 +91,13 @@ module.exports.updateListing = async (req, res) => {
 
     req.flash("update", "Listing Updated!");
 
-    res.redirect(`/listings/${id}`);
+    res.redirect(`/listings/${listingId}`);
     return;
 }
 
 module.exports.destroyListing = async (req, res) => {
-    let { id } = req.params;
-    await Listing.findByIdAndDelete(id);
+    let { listingId } = req.params;
+    await Listing.findByIdAndDelete(listingId);
 
     req.flash("failure", "Listing Deleted!");
 

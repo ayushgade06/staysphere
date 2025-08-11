@@ -91,7 +91,7 @@ app.use((req, res, next) => {
 
 // ====== Routes ======
 app.use("/listings", listingsRouter);
-app.use("/listings/:id/reviews", reviewsRouter);
+app.use("/listings/:listingId/reviews", reviewsRouter);
 app.use("/", userRouter);
 
 // ====== Error Handling ======
