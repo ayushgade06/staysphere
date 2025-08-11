@@ -4,7 +4,6 @@ const ExpressError = require("../utils/ExpressError.js");
 
 module.exports.index = async (req, res) => {
     const allListings = await Listing.find({});
-
     res.render("listings/index", { allListings });
     return;
 }
@@ -17,7 +16,6 @@ module.exports.renderNewForm = (req, res) => {
 module.exports.showListing = async(req, res) => {
     let { listingId } = req.params;
     const listing = await Listing.findById(listingId).populate({ path: "reviews", populate: { path: "author" } }).populate("owner");
-
     res.render("listings/show", { listing })
     return;
 }
@@ -68,7 +66,6 @@ module.exports.renderEditForm = async (req, res) => {
 }
 
 module.exports.updateListing = async (req, res) => {
-
     let url = req.file.path;
     let filename = req.file.filename;
 

@@ -37,11 +37,33 @@ app.use(express.static(path.join(__dirname, "public")));
 const dbUrl = process.env.ATLAS_DB_URL || 'mongodb://127.0.0.1:27017/my-local-db';
 
 async function main() {
-    await mongoose.connect(dbUrl);
+    try {
+        console.log('🔌 Attempting to connect to MongoDB Atlas...');
+        await mongoose.connect(dbUrl, {
+            ssl: true,
+            tls: true,
+            tlsAllowInvalidCertificates: true,
+            tlsAllowInvalidHostnames: true,
+            retryWrites: true,
+            w: 'majority',
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 45000,
+        });
+        console.log('✅ Database connection successful');
+    } catch (err) {
+        console.error('❌ MongoDB Atlas connection failed:', err.message);
+        console.log('🔄 Trying local MongoDB...');
+        
+        try {
+            await mongoose.connect('mongodb://127.0.0.1:27017/my-local-db');
+            console.log('✅ Local MongoDB connection successful');
+        } catch (localErr) {
+            console.error('❌ Local MongoDB also failed:', localErr.message);
+            console.log('⚠️  Continuing without database connection...');
+        }
+    }
 }
-main()
-    .then(() => console.log('✅ Database connection successful'))
-    .catch(err => console.error('❌ Database connection error:', err));
+main();
 
 // ====== Session Store ======
 const secret = process.env.SECRET || 'thisshouldbeabettersecret';
