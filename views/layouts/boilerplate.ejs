@@ -1,34 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WanderLust</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="https://thumbs.dreamstime.com/b/illustration-globe-logo-design-isolated-white-background-globe-logo-vector-128581384.jpg">
+    <title>StaySphere</title>
 
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+      /* ---------------- DARK MODE ---------------- */
 
-    <link rel="stylesheet" href="/css/rating.css">
-    
-</head>
-<body>
+      body.dark-mode {
+        background: #0f0f0f !important;
+        color: #f5f5f5 !important;
+      }
+
+      /* Navbar dark mode */
+      body.dark-mode .navbar {
+        background: rgba(20, 20, 20, 0.85) !important;
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      body.dark-mode .nav-link {
+        color: #e8e8e8 !important;
+      }
+
+      /* Dropdown */
+      body.dark-mode .dropdown-menu {
+        background: #1a1a1a !important;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      body.dark-mode .dropdown-item {
+        color: #e8e8e8 !important;
+      }
+
+      body.dark-mode .dropdown-item:hover {
+        background: #2a2a2a !important;
+      }
+
+      /* Footer MUST BE DARK */
+      body.dark-mode footer,
+      body.dark-mode .f-info {
+        background: #000 !important;
+        color: #fff !important;
+      }
+
+      body.dark-mode footer a,
+      body.dark-mode .f-info a {
+        color: #fff !important;
+      }
+
+      /* Cards */
+      body.dark-mode .card {
+        background: #1a1a1a !important;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.45);
+      }
+
+      body.dark-mode .card-body p,
+      body.dark-mode .card-body b {
+        color: #fff !important;
+      }
+
+      /* Filters */
+      body.dark-mode .filter p {
+        color: #bbb !important;
+      }
+
+      /* Search input */
+      body.dark-mode .search-input {
+        background: #1b1b1b !important;
+        color: white !important;
+      }
+
+      body.dark-mode .search-input::placeholder {
+        color: #9b9b9b !important;
+      }
+    </style>
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/css/rating.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+  </head>
+  <body>
     <%- include("../includes/navbar.ejs") %>
 
     <div class="container">
-
-        <%- include("../includes/flash.ejs") %>
-
-        <%- body %>
+      <%- include("../includes/flash.ejs") %> <%- body %>
     </div>
 
     <%- include("../includes/footer.ejs") %>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="/js/script.js"></script>
 
-</body>
+    <script>
+      const themeSwitch = document.getElementById("themeSwitch");
+
+      if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark-mode");
+        themeSwitch.checked = true;
+      }
+
+      themeSwitch.addEventListener("change", () => {
+        document.body.classList.toggle("dark-mode");
+        localStorage.setItem(
+          "theme",
+          document.body.classList.contains("dark-mode") ? "dark" : "light"
+        );
+      });
+    </script>
+  </body>
 </html>

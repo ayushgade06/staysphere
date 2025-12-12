@@ -1,63 +1,169 @@
 <style>
-
-  .btn-search{
+  .btn-search {
     background-color: #fe424d;
     color: white;
     border-radius: 25px;
     padding: 0 1rem 0 1rem;
   }
-
-  .btn-search:hover{
+  .btn-search:hover {
     background-color: #fe424d;
     color: white;
   }
-
-  .btn-search i{
+  .btn-search i {
     display: inline;
     margin-right: 0.5rem;
   }
 
-  .search-input{
+  .search-input {
     border-radius: 25px;
     padding: 0.5rem 3rem 0.5rem 3rem;
   }
 
-</style>
+  /* 🌙 THEME TOGGLE SWITCH DESIGN */
+  .theme-toggle-container {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+  }
 
+  .theme-switch {
+    width: 48px;
+    height: 24px;
+    background: #ccc;
+    border-radius: 50px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .theme-switch::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s ease;
+  }
+
+  #themeToggle {
+    display: none;
+  }
+
+  /* When active */
+  #themeToggle:checked + .theme-switch {
+    background: #ff5a5f;
+    box-shadow: 0 0 8px rgba(255, 90, 95, 0.7);
+  }
+
+  #themeToggle:checked + .theme-switch::after {
+    transform: translateX(24px);
+  }
+</style>
 
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+
+    <!-- BRAND -->
+    <a class="navbar-brand" href="/listings">
+      <i class="fa-regular fa-compass"></i>
+    </a>
+
+    <!-- TOGGLER -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
+
+    <!-- NAV ITEMS -->
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+      <!-- LEFT LINKS -->
       <div class="navbar-nav">
-
         <a class="nav-link" href="/listings">Explore</a>
+        <a class="nav-link" href="/listings">All Listings</a>
+
+        <% if (currUser) { %>
+        <a class="nav-link" href="/listings/new">Create Listing</a>
+        <% } %>
       </div>
 
+      <!-- SEARCH BAR -->
       <div class="navbar-nav ms-auto">
-        <div class="d-flex" role="search">
-          <input type="search" class="form-control me-2 search-input" placeholder="Search destinations">
-          <button class="btn btn-outline-success btn-search" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+        <form action="/listings/search" method="GET" class="d-flex" role="search">
+          <input
+            type="search"
+            name="q"
+            class="form-control me-2 search-input"
+            placeholder="Search destinations"
+          />
+          <button class="btn btn-outline-success btn-search" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i>Search
+          </button>
+        </form>
+      </div>
+
+      <!-- RIGHT SIDE USER MENU + THEME TOGGLE -->
+      <div class="navbar-nav ms-auto d-flex align-items-center">
+
+        <!-- 🌙 LIGHT/DARK MODE TOGGLE -->
+        <div class="theme-toggle-container">
+          <input type="checkbox" id="themeToggle">
+          <label for="themeToggle" class="theme-switch"></label>
         </div>
-      </div>
 
-      <div class="navbar-nav ms-auto">
+        <% if (currUser) { %>
 
-        <a class="nav-link" href="/listings/new">Airbnb your home</a>
+        <div class="dropdown ms-3">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+          >
+            <i class="fa-solid fa-user me-1"></i><%= currUser.username %>
+          </a>
 
-        <% if(!currUser) { %>
-          <a class="nav-link" href="/signup"><b>Sign Up</b></a>
-          <a class="nav-link" href="/login"><b>Login</b></a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="/listings"><i class="fa-solid fa-list me-2"></i>All Listings</a></li>
+            <li><a class="dropdown-item" href="/listings/new"><i class="fa-solid fa-plus me-2"></i>Create New Listing</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item" href="/logout"><i class="fa-solid fa-sign-out-alt me-2"></i>Logout</a></li>
+          </ul>
+        </div>
+
+        <% } else { %>
+
+        <a class="nav-link ms-3" href="/signup"><b>Sign Up</b></a>
+        <a class="nav-link" href="/login"><b>Login</b></a>
+
         <% } %>
-        
-        <% if(currUser) {%>
-          <a class="nav-link" href="/logout">Logout</a>
-        <% } %>
-        
+
       </div>
     </div>
   </div>
 </nav>
+
+<script>
+  // 🌙 GLOBAL DARK MODE SCRIPT
+  const themeToggle = document.getElementById("themeToggle");
+
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark-mode");
+    themeToggle.checked = true;
+  }
+
+  themeToggle.addEventListener("change", () => {
+    document.body.classList.toggle("dark-mode");
+    localStorage.setItem(
+      "theme",
+      document.body.classList.contains("dark-mode") ? "dark" : "light"
+    );
+  });
+</script>

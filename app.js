@@ -68,20 +68,26 @@ main();
 // ====== Session Store ======
 const secret = process.env.SECRET || 'thisshouldbeabettersecret';
 
-const store = MongoStore.create({
-    mongoUrl: dbUrl,
-    touchAfter: 24 * 3600, // time period in seconds
-    crypto: {
-        secret
-    }
-});
+let store;
+try {
+    store = MongoStore.create({
+        mongoUrl: dbUrl,
+        touchAfter: 24 * 3600, // time period in seconds
+        crypto: {
+            secret
+        }
+    });
 
-store.on("error", function (e) {
-    console.log("❌ Session Store Error", e);
-});
+    store.on("error", function (e) {
+        console.log("❌ Session Store Error", e);
+    });
+} catch (err) {
+    console.log("⚠️  Session store creation failed, using memory store");
+    store = undefined;
+}
 
 const sessionOptions = {
-    store,
+    store: store || undefined,
     secret,
     resave: false,
     saveUninitialized: true,
@@ -104,10 +110,18 @@ passport.deserializeUser(User.deserializeUser());
 
 // ====== Global Variables Middleware ======
 app.use((req, res, next) => {
-    res.locals.success = req.flash("success");
-    res.locals.failure = req.flash("failure");
-    res.locals.update = req.flash("update");
-    res.locals.currUser = req.user;
+    try {
+        res.locals.success = req.flash("success");
+        res.locals.failure = req.flash("failure");
+        res.locals.update = req.flash("update");
+        res.locals.currUser = req.user || null;
+    } catch (err) {
+        // Fallback if flash or user is not available
+        res.locals.success = [];
+        res.locals.failure = [];
+        res.locals.update = [];
+        res.locals.currUser = null;
+    }
     next();
 });
 

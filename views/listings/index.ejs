@@ -1,89 +1,242 @@
 <% layout("layouts/boilerplate") %>
 
 <style>
+  /* ---------------- FILTERS ---------------- */
 
-    #filters{
-        display: flex;
-        flex-wrap: wrap;
-    }
+  #filters-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding: 0 0.7rem;
+  }
 
-    .filter{
-        margin-top: 2rem;
-        text-align: center;
-        margin-right: 2rem;
-        opacity: 0.7;
-    }
+  #filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin: 0 auto;
+  }
 
-    .filter:hover{
-        opacity: 1;
-        cursor: pointer;
-    }
+  /* Remove link underline + blue color */
+  #filters a {
+    text-decoration: none !important;
+    color: inherit !important;
+  }
 
-    .filter p{
-        font-size: 0.8rem ;
-    }
+  body.dark-mode #filters a {
+    color: inherit !important;
+  }
+
+  .filter {
+    text-align: center;
+    opacity: 0.7;
+    transition: 0.2s ease;
+    margin: 0 auto;
+  }
+
+  .filter:hover {
+    opacity: 1;
+    cursor: pointer;
+    transform: translateY(-2px);
+  }
+
+  .filter p {
+    font-size: 0.85rem;
+    margin-top: 0.3rem;
+  }
+
+  /* Active Filter Highlight */
+  .filter.active p,
+  .filter.active i {
+    font-weight: 600;
+    opacity: 1 !important;
+    filter: drop-shadow(0 0 3px rgba(255,255,255,0.4));
+  }
+
+  /* ---------------- LISTING CARDS ---------------- */
+
+  .listing-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .listing-card .card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: 0.25s ease-in-out;
+    background: #fff;
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.08);
+  }
+
+  .listing-card .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.15);
+  }
+
+  .listing-card img {
+    height: 20rem;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .card-body {
+    padding: 14px 18px;
+  }
+
+  .card-body p {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+  }
+
+  .card-body b {
+    font-size: 1.1rem;
+  }
+
+  .row {
+    row-gap: 32px;
+    margin-top: 2rem;
+  }
+
+  /* ---------------- THEME SWITCH ---------------- */
+
+  .theme-toggle {
+    position: relative;
+  }
+
+  .switch {
+    width: 50px;
+    height: 25px;
+    background: #ccc;
+    display: inline-block;
+    border-radius: 50px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .switch::after {
+    content: "";
+    width: 22px;
+    height: 22px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 1.5px;
+    left: 2px;
+    transition: transform 0.3s ease;
+  }
+
+  #themeSwitch {
+    display: none;
+  }
+
+  #themeSwitch:checked + .switch {
+    background: #ff5a5f !important;
+    box-shadow: 0 0 10px rgba(255, 90, 95, 0.6);
+  }
+
+  #themeSwitch:checked + .switch::after {
+    transform: translateX(25px);
+  }
+
 </style>
 
 <body>
 
-    <!-- <h3>All Listings</h3> -->
+<div id="filters-wrapper">
 
-    <div id="filters">
-        <div class="filter">
-            <div><i class="fa-solid fa-fire"></i></div> 
-            <p>Trending</p>
-        </div>
+  <!-- FILTERS exactly like old style -->
+  <div id="filters">
 
-        <div class="filter">
-            <div><i class="fa-solid fa-bed"></i></div> 
-            <p>Rooms</p>
-        </div>
-
-        <div class="filter">
-            <div><i class="fa-solid fa-mountain-city"></i></div> 
-            <p>Iconic cities</p>
-        </div>
-
-        <div class="filter">
-            <div><i class="fa-solid fa-mountain"></i></div> 
-            <p>Mountains</p>
-        </div>
-
-        <div class="filter">
-            <div><i class="fa-brands fa-fort-awesome"></i></div> 
-            <p>Castles</p>
-        </div>
-
-        <div class="filter">
-            <div><i class="fa-solid fa-person-swimming"></i></div> 
-            <p>Amazing Pool</p>
-        </div>
-
-        <div class="filter">
-            <div><i class="fa-regular fa-snowflake"></i></div> 
-            <p>Artic</p>
-        </div>
+    <div class="filter <%= category==='Trending' ? 'active' : '' %>">
+      <a href="/listings?category=Trending"><i class="fa-solid fa-fire"></i><p>Trending</p></a>
     </div>
 
-    <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1 mt-3">
-        <% for(let listing of allListings) { %>
-            <a href="/listings/<%= listing.id %>" class="listing-link">
-                <div class="card col listing-card">
-                <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 20rem;">
-                <div class="card-body">
-                    <p class="card-text">
-                        <b><%= listing.title %></b>
-                        <br>
-                        &#8377; <%= listing.price.toLocaleString("en-IN") %> / night
-                    </p>
-                </div>
-            </div>
-            </a>
-        <% } %>
+    <div class="filter <%= category==='Rooms' ? 'active' : '' %>">
+      <a href="/listings?category=Rooms"><i class="fa-solid fa-bed"></i><p>Rooms</p></a>
     </div>
 
-    
-    
-    
+    <div class="filter <%= category==='Iconic Cities' ? 'active' : '' %>">
+      <a href="/listings?category=Iconic%20Cities"><i class="fa-solid fa-mountain-city"></i><p>Iconic Cities</p></a>
+    </div>
+
+    <div class="filter <%= category==='Mountains' ? 'active' : '' %>">
+      <a href="/listings?category=Mountains"><i class="fa-solid fa-mountain"></i><p>Mountains</p></a>
+    </div>
+
+    <div class="filter <%= category==='Castles' ? 'active' : '' %>">
+      <a href="/listings?category=Castles"><i class="fa-brands fa-fort-awesome"></i><p>Castles</p></a>
+    </div>
+
+    <div class="filter <%= category==='Amazing Pool' ? 'active' : '' %>">
+      <a href="/listings?category=Amazing%20Pool"><i class="fa-solid fa-person-swimming"></i><p>Amazing Pool</p></a>
+    </div>
+
+    <div class="filter <%= category==='Arctic' ? 'active' : '' %>">
+      <a href="/listings?category=Arctic"><i class="fa-regular fa-snowflake"></i><p>Arctic</p></a>
+    </div>
+
+    <!-- NEW FILTERS ADDED (same style) -->
+    <div class="filter <%= category==='Beach' ? 'active' : '' %>">
+      <a href="/listings?category=Beach"><i class="fa-solid fa-umbrella-beach"></i><p>Beach</p></a>
+    </div>
+
+    <div class="filter <%= category==='Camping' ? 'active' : '' %>">
+      <a href="/listings?category=Camping"><i class="fa-solid fa-campground"></i><p>Camping</p></a>
+    </div>
+
+    <div class="filter <%= category==='Pet Friendly' ? 'active' : '' %>">
+      <a href="/listings?category=Pet%20Friendly"><i class="fa-solid fa-paw"></i><p>Pet Friendly</p></a>
+    </div>
+
+    <div class="filter <%= category==='Countryside' ? 'active' : '' %>">
+      <a href="/listings?category=Countryside"><i class="fa-solid fa-leaf"></i><p>Countryside</p></a>
+    </div>
+
+    <div class="filter <%= category==='Luxury' ? 'active' : '' %>">
+      <a href="/listings?category=Luxury"><i class="fa-solid fa-gem"></i><p>Luxury</p></a>
+    </div>
+
+  </div>
+
+  
+
+</div>
+
+<!-- LISTINGS GRID -->
+<div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1">
+  <% for(let listing of allListings) { %>
+  <a href="/listings/<%= listing.id %>" class="listing-link">
+    <div class="card col listing-card">
+      <img src="<%= listing.image.url %>" />
+      <div class="card-body">
+        <p>
+          <b><%= listing.title %></b><br>
+          ₹ <%= listing.price.toLocaleString("en-IN") %> / night
+        </p>
+      </div>
+    </div>
+  </a>
+  <% } %>
+</div>
 
 </body>
+
+<script>
+  const themeSwitch = document.getElementById("themeSwitch");
+
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark-mode");
+    themeSwitch.checked = true;
+  }
+
+  themeSwitch.addEventListener("change", () => {
+    document.body.classList.toggle("dark-mode");
+    localStorage.setItem("theme",
+      document.body.classList.contains("dark-mode") ? "dark" : "light"
+    );
+  });
+</script>
