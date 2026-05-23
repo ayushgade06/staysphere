@@ -89,7 +89,7 @@
         <a class="nav-link" href="/listings">Explore</a>
         <a class="nav-link" href="/listings">All Listings</a>
 
-        <% if (currUser) { %>
+        <% if (locals.currUser) { %>
         <a class="nav-link" href="/listings/new">Create Listing</a>
         <% } %>
       </div>
@@ -118,7 +118,7 @@
           <label for="themeToggle" class="theme-switch"></label>
         </div>
 
-        <% if (currUser) { %>
+        <% if (locals.currUser) { %>
 
         <div class="dropdown ms-3">
           <a
