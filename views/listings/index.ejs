@@ -148,7 +148,6 @@
 
 <div id="filters-wrapper">
 
-  <!-- FILTERS exactly like old style -->
   <div id="filters">
 
     <div class="filter <%= category==='Trending' ? 'active' : '' %>">
@@ -179,7 +178,6 @@
       <a href="/listings?category=Arctic"><i class="fa-regular fa-snowflake"></i><p>Arctic</p></a>
     </div>
 
-    <!-- NEW FILTERS ADDED (same style) -->
     <div class="filter <%= category==='Beach' ? 'active' : '' %>">
       <a href="/listings?category=Beach"><i class="fa-solid fa-umbrella-beach"></i><p>Beach</p></a>
     </div>
@@ -206,7 +204,6 @@
 
 </div>
 
-<!-- LISTINGS GRID -->
 <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1">
   <% for(let listing of allListings) { %>
   <a href="/listings/<%= listing.id %>" class="listing-link">

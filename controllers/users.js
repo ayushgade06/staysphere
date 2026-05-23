@@ -1,9 +1,11 @@
 const User = require("../models/user.js");
 
+// render signup form
 module.exports.renderSignupForm = (req, res) => {
     res.render("users/signup.ejs");
 };
 
+// signup
 module.exports.signup = async (req, res, next) => {
     
     try{
@@ -30,11 +32,13 @@ module.exports.signup = async (req, res, next) => {
     }
 };
 
+// render login form
 module.exports.renderLoginForm = (req, res) => {
     res.render("users/login.ejs");
     return;
 };
 
+// login
 module.exports.login = async (req, res) => {
         req.flash("success", "Welcome back to WanderLust");
         
@@ -49,6 +53,7 @@ module.exports.login = async (req, res) => {
         }
 };
 
+// logout
 module.exports.logout = (req, res, next) => {
     req.logout((err) => {
         if(err) {

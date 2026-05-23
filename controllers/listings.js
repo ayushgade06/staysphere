@@ -2,9 +2,7 @@ const Listing = require("../models/listing.js");
 const { listingSchema } = require("../schema.js");
 const ExpressError = require("../utils/ExpressError.js");
 
-// ---------------------------
-// INDEX + CATEGORY FILTER
-// ---------------------------
+// index + category filter
 module.exports.index = async (req, res) => {
     const { category } = req.query;
 
@@ -16,9 +14,7 @@ module.exports.index = async (req, res) => {
     res.render("listings/index", { allListings, category });
 };
 
-// ---------------------------
-// SEARCH
-// ---------------------------
+// search 
 module.exports.searchListings = async (req, res) => {
     let search = req.query.q;
 
@@ -33,16 +29,12 @@ module.exports.searchListings = async (req, res) => {
     res.render("listings/index", { allListings, category: null });
 };
 
-// ---------------------------
-// NEW FORM
-// ---------------------------
+// render new form
 module.exports.renderNewForm = (req, res) => {
     res.render("listings/new");
 };
 
-// ---------------------------
-// SHOW LISTING
-// ---------------------------
+// show listing
 module.exports.showListing = async (req, res) => {
     let { listingId } = req.params;
 
@@ -55,9 +47,7 @@ module.exports.showListing = async (req, res) => {
     res.render("listings/show", { listing });
 };
 
-// ---------------------------
-// CREATE LISTING
-// ---------------------------
+// create listing
 module.exports.createListing = async (req, res) => {
     const { title, description, price, country, location, category, lat, lng } =
         req.body.listing;
@@ -88,9 +78,7 @@ module.exports.createListing = async (req, res) => {
     res.redirect(`/listings/${listing._id}`);
 };
 
-// ---------------------------
-// EDIT FORM
-// ---------------------------
+// render edit form
 module.exports.renderEditForm = async (req, res) => {
     const { listingId } = req.params;
 
@@ -102,9 +90,7 @@ module.exports.renderEditForm = async (req, res) => {
     res.render("listings/edit", { listing, originalImageUrl });
 };
 
-// ---------------------------
-// UPDATE LISTING
-// ---------------------------
+// update listing
 module.exports.updateListing = async (req, res) => {
     const { listingId } = req.params;
 
@@ -140,9 +126,7 @@ module.exports.updateListing = async (req, res) => {
     res.redirect(`/listings/${listingId}`);
 };
 
-// ---------------------------
-// DELETE LISTING
-// ---------------------------
+// delete listing
 module.exports.destroyListing = async (req, res) => {
     const { listingId } = req.params;
 

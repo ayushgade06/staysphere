@@ -9,9 +9,7 @@ const upload = multer({ storage });
 // ⭐ Correct controller import
 const listingController = require("../controllers/listings.js");
 
-// ---------------------------
-// INDEX + CREATE
-// ---------------------------
+// index + create
 router
     .route("/")
     .get(wrapAsync(listingController.index))
@@ -22,19 +20,13 @@ router
         wrapAsync(listingController.createListing)
     );
 
-// ---------------------------
-// NEW FORM
-// ---------------------------
+// new form
 router.get("/new", isLoggedIn, listingController.renderNewForm);
 
-// ---------------------------
-// SEARCH (FIXED NAME)
-// ---------------------------
+// search
 router.get("/search", wrapAsync(listingController.searchListings));
 
-// ---------------------------
-// SHOW + UPDATE + DELETE
-// ---------------------------
+// show + update + delete
 router
     .route("/:listingId")
     .get(wrapAsync(listingController.showListing))
@@ -47,9 +39,7 @@ router
     )
     .delete(isLoggedIn, isOwner, wrapAsync(listingController.destroyListing));
 
-// ---------------------------
-// EDIT FORM
-// ---------------------------
+// edit form
 router.get("/:listingId/edit", isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));
 
 module.exports = router;
